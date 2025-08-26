@@ -8,9 +8,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PokeTile() {
+fun PokeTile(name: String) {
+    // TODO: use a material3 card
     Text(
-        text = "POKEMON",
+        text = name,
         style = TextStyle(fontSize = 32.sp),
         color = Color.Red,
         maxLines = 1,
