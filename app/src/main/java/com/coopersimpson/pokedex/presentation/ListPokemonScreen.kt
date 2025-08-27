@@ -11,6 +11,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,6 +29,11 @@ fun ListPokemonScreen(modifier: Modifier = Modifier) {
         factory = PokemonVMFactory(PokemonRepository(NetworkModule.api))
     )
     val state = vm.uiState
+
+    // Stores the value inside the composition so it survive recomposition
+    // It is observable, meaning we trigger a recomposition of any composables
+    // that read it.
+    var selectedName by remember { mutableStateOf<String?>(null) }
 
     Box(modifier.fillMaxSize()) {
         when {
@@ -44,7 +53,14 @@ fun ListPokemonScreen(modifier: Modifier = Modifier) {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(state.names) { name ->
-                        PokeTile(name)
+                        var isSelected = selectedName == name
+                        PokeTile(
+                            name = name,
+                            selected = isSelected,
+                            onClick = {
+                                selectedName = if (isSelected) null else name
+                            }
+                        )
                     }
                 }
             }
